@@ -38,17 +38,17 @@ class AuthentificationController extends AbstractController
 	$utilisateur = new Utilisateur;
 	$utilisateur = $aServeur[0];
 	//Démarrage d'une session
-$sess = $request->getSession();
-//Créer des variables de session
-$sess->set("idUtilisateur", $utilisateur->getId());
-$sess->set("nomUtilisateur", $utilisateur->getNom());
-$sess->set("prenomUtilisateur", $utilisateur->getPrenom());
-return $this->redirectToRoute('dashboard');
-}else{
-return $this->redirectToRoute('authentification');
-}
-dd($reponse);
-return new response(1);
+	$sess = $request->getSession();
+	//Créer des variables de session
+	$sess->set("idUtilisateur", $utilisateur->getId());
+	$sess->set("nomUtilisateur", $utilisateur->getNom());
+	$sess->set("prenomUtilisateur", $utilisateur->getPrenom());
+	return $this->redirectToRoute('dashboard');
+	}else{
+	return $this->redirectToRoute('authentification');
+	}
+	dd($reponse);
+	return new response(1);
 	
 }
 	
@@ -59,9 +59,20 @@ return new response(1);
 	 public function dashboard(Request $request, EntityManagerInterface $manager): Response
 	{
 		$sess = $request->getSession();
-		return $this->render('authentification/dashboard.html.twig', [
-		'controller_name' => 'Espace Client',
+		if($sess->get("idUtilisateur")){
+		//Récupération du noombre de document
+		$listeDocuments = $manager->getRepository(Acces::class)->findByUtilisateurId($sess->get("idUtilisateur"));
+		$nbDocument = 0;
+		foreach($listeDocuments as $val){
+		$nbDocument++;
+		}
+		return $this->render('authentification/dashboard.html.twig',[
+		'controller_name' => "Espace Client",
+		'nb_document' => $nbDocument
 		]);
+		}else{
+		return $this->redirectToRoute('authentification');
+		}
 	}
 
 	 /**

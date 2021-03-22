@@ -22,6 +22,18 @@ class Acces
      * @ORM\JoinColumn(nullable=false)
      */
     private $utilisateurId;
+	/**
+     * @ORM\ManyToOne(targetEntity=Autorisation::class, inversedBy="acces")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $autorisationId;
+	
+	/**
+     * @ORM\ManyToOne(targetEntity=Document::class, inversedBy="acces")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $documentId;
+	
 
     public function getId(): ?int
     {
@@ -36,6 +48,29 @@ class Acces
     public function setUtilisateurId(?Utilisateur $utilisateurId): self
     {
         $this->utilisateurId = $utilisateurId;
+
+        return $this;
+    }
+	public function getAutorisationId(): ?Autorisation
+    {
+        return $this->autorisationId;
+    }
+
+    public function setAutorisationId(?Autorisation $autorisationId): self
+    {
+        $this->autorisationId = $autorisationId;
+
+        return $this;
+    }
+
+    public function getDocumentId(): ?Document
+    {
+        return $this->documentId;
+    }
+
+    public function setDocumentId(?Document $documentId): self
+    {
+        $this->documentId = $documentId;
 
         return $this;
     }
